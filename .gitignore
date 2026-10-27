@@ -221,3 +221,7 @@ __marimo__/
 
 .vscode/
 reports/genai_log.jsonl
+
+data/raw/
+data/processed/rtt_balanced.csv
+data/processed/national_kpis.csv
