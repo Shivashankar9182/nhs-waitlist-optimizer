@@ -8,7 +8,8 @@ An end-to-end platform that analyses NHS England Referral to Treatment (RTT) wai
 by how many patients are close to breaching the 18-week standard, forecasts next month's performance, and
 writes a plain-English briefing with guardrails.
 
-**Live demo:** _add your Streamlit link here_  |  **API docs:** _add your Render link here_/docs
+**Live demo:** https://nhs-waitlist-optimizer-aiwwihyhopfjm65aan7hm9.streamlit.app
+**API docs:** https://nhs-waitlist-optimizer.onrender.com/docs
 
 ## Screenshots
 
