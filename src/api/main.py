@@ -22,6 +22,7 @@ from typing import Optional
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 SRC = Path(__file__).resolve().parents[1]
@@ -30,7 +31,7 @@ for sub in ("api", "app", "genai"):
 
 from dashboard_logic import service_table  # noqa: E402
 from predictor import NotEnoughData, Predictor, ServiceNotFound  # noqa: E402
-from weekly_summary import generate, make_anthropic_llm  
+from weekly_summary import generate, make_anthropic_llm  # noqa: E402
 
 app = FastAPI(title="NHS Waiting List Optimizer API", version="0.4",
               description="Illustrative student capstone built on NHS England RTT statistics. "
@@ -52,6 +53,53 @@ class PredictRequest(BaseModel):
                                  description="Month to forecast from (YYYY-MM). Default: latest month.")
 
 
+class Driver(BaseModel):
+    feature: str
+    label: str
+    value: Optional[float] = None
+    typical_value: Optional[float] = None
+    unit: str = ""
+    effect_pp: float = Field(..., description="How far this input moves the forecast versus a typical value (percentage points)")
+
+
+class ModelInfo(BaseModel):
+    name: str
+    test_mae_pp: Optional[float] = None
+    same_as_last_month_mae_pp: Optional[float] = None
+    test_months: Optional[list[str]] = None
+
+
+class PredictResponse(BaseModel):
+    trust_code: str
+    trust_name: str
+    specialty_code: str
+    specialty: str
+    icb_name: Optional[str] = None
+    month: str
+    forecast_month: str
+    waiting_list: int
+    current_pct_within_18w: float
+    forecast_pct_within_18w: float
+    forecast_change_pp: float
+    patients_waiting_12_18w: int
+    patients_to_treat_for_92: int
+    drivers: list[Driver]
+    model: ModelInfo
+    notice: str
+
+
+class HealthResponse(BaseModel):
+    status: str
+    model: str
+    months: list[str]
+    rows: int
+
+
+ERRORS = {404: {"description": "Unknown trust, specialty or month"},
+          422: {"description": "Service too small to forecast, or missing the previous month"},
+          503: {"description": "Data or model files not found"}}
+
+
 def _month(m: Optional[str]):
     return None if m is None else pd.Timestamp(m + "-01")
 
@@ -67,14 +115,20 @@ def _call(fn, *a, **k):
         raise HTTPException(status_code=503, detail=f"Missing file: {e.filename}. Build the data and train the model first.")
 
 
-@app.get("/health")
+@app.get("/", include_in_schema=False)
+def root():
+    """Send visitors (and the host's port check) to the interactive docs instead of a 404."""
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/health", response_model=HealthResponse)
 def health():
     p = _call(get_predictor)
     return {"status": "ok", "model": p.meta.get("model", "unknown"),
             "months": [f"{p.months[0]:%Y-%m}", f"{p.latest:%Y-%m}"], "rows": int(len(p.df))}
 
 
-@app.post("/predict")
+@app.post("/predict", response_model=PredictResponse, responses=ERRORS)
 def predict(req: PredictRequest):
     p = _call(get_predictor)
     return _call(p.predict, req.trust_code.strip(), req.specialty_code.strip(), _month(req.month))

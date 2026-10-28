@@ -13,7 +13,19 @@ writes a plain-English briefing with guardrails.
 
 ## Screenshots
 
-_Add: `docs/screenshots/dashboard_national.png`, `dashboard_watchlist.png`, `api_docs.png`, `api_predict.png`_
+### Dashboard
+![National trend](docs/screenshots/dashboard_national.png)
+![Breach-risk watchlist](docs/screenshots/dashboard_watchlist.png)
+![Trust drill-down](docs/screenshots/dashboard_trust.png)
+![What-if scenario](docs/screenshots/dashboard_whatif.png)
+![AI summary](docs/screenshots/dashboard_ai_summary.png)
+
+### API
+![API documentation](docs/screenshots/api_docs.png)
+![Forecast response with drivers](docs/screenshots/api_predict.png)
+
+### Tests
+![26 tests passing](docs/screenshots/tests_passed.png)
 
 ## What it does
 
