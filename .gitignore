@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+.vscode/
+reports/genai_log.jsonl
+
+data/raw/
+data/processed/rtt_balanced.csv
+data/processed/national_kpis.csv

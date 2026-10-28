@@ -1,0 +1,38 @@
+{
+  "model": "gradient_boosting",
+  "target": "pct_within_18w at month t+1 (predicted as change from month t)",
+  "features": [
+    "pct_now",
+    "log_list",
+    "d_pct",
+    "d_list_pct",
+    "post_break",
+    "share_wk_0_6",
+    "share_wk_6_12",
+    "share_wk_12_18",
+    "share_wk_18_26",
+    "share_wk_26_52",
+    "share_wk_52_plus",
+    "specialty_code"
+  ],
+  "train_rows": 16365,
+  "test_rows": 8180,
+  "test_months": [
+    "2026-06",
+    "2026-07",
+    "2026-08"
+  ],
+  "metrics": {
+    "MAE_pp": 2.167,
+    "RMSE_pp": 3.396,
+    "weighted_MAE_pp": 1.55,
+    "MAE_vs_naive_%": -5.1
+  },
+  "naive_metrics": {
+    "MAE_pp": 2.283,
+    "RMSE_pp": 3.607,
+    "weighted_MAE_pp": 1.613,
+    "MAE_vs_naive_%": 0.0
+  },
+  "notes": "Balanced panel, cells with >=100 pathways, 12 months of data. The Mar 2026 structural break target month is excluded from training. This choice was made after comparing setups on the test months, so the gain is optimistic."
+}

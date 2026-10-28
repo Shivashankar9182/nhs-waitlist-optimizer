@@ -1,0 +1,8 @@
+setup,train_rows,test_rows,naive_MAE,model_MAE,gain_pp,gain_95%_CI,weighted_gain_pp
+"A. as trained (cells >=100, all months)",19097,8180,2.283,2.261,0.022,"[-0.002, 0.048]",-0.115
+B. drop the Mar-2026 break from training,16365,8180,2.283,2.167,0.116,"[0.095, 0.139]",0.064
+C. only cells >=500 pathways,14179,6127,1.901,1.954,-0.053,"[-0.076, -0.031]",-0.145
+D. weight training rows by list size,19097,8180,2.283,2.326,-0.043,"[-0.066, -0.023]",-0.149
+E. B + C + D combined,12142,6127,1.901,1.823,0.078,"[0.062, 0.094]",0.052
+F. trust level (all specialties added),2263,1008,1.799,1.931,-0.132,"[-0.214, -0.047]",-0.393
+"G. trust level, break dropped",1931,1008,1.799,1.832,-0.033,"[-0.105, 0.035]",-0.079

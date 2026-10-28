@@ -1,0 +1,5 @@
+model,MAE_pp,RMSE_pp,weighted_MAE_pp,MAE_vs_naive_%
+naive_last_month,2.283,3.607,1.613,0.0
+naive_plus_mean_drift,2.282,3.606,1.612,-0.0
+ridge,2.274,3.464,1.675,-0.4
+gradient_boosting,2.167,3.396,1.55,-5.1
